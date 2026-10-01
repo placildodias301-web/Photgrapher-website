@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-ink: #0c0c0d;
+  --color-ink-2: #141416;
+  --color-ink-3: #1d1d20;
+  --color-line: #2a2a2e;
+  --color-paper: #f2eee7;
+  --color-mute: #8b877f;
+  --color-gold: var(--accent, #c9a96e);
+  --font-display: var(--font-cormorant), "Times New Roman", serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+}
+
+html { background: var(--color-ink); color-scheme: dark; }
+body {
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+::selection { background: var(--color-gold); color: var(--color-ink); }
+
+:focus-visible { outline: 2px solid var(--color-gold); outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@keyframes pageFade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes lbFade { from { opacity: 0; } to { opacity: 1; } }
+.page-fade { animation: pageFade 0.8s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.lb-fade { animation: lbFade 0.45s ease both; }
+@media (pointer: fine) { .has-cursor [data-cursor] { cursor: none; } }
