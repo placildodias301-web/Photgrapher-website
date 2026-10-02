@@ -64,7 +64,6 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ c
           key={category || 'all'}
           initial={items}
           total={total}
-          pageSize={PAGE_SIZE}
           fetchMore={async (page) => {
             "use server";
             const r = await getPortfolioShoots({ category, page, pageSize: PAGE_SIZE });
