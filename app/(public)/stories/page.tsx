@@ -51,7 +51,7 @@ export default async function Page() {
                 {s.description && (
                   <p className="mt-4 max-w-md text-sm leading-relaxed text-mute line-clamp-3">{s.description}</p>
                 )}
-                <span className="mt-6 inline-block text-[11px] tracking-[0.25em] uppercase text-paper/80 group-hover:text-gold transition-colors">
+                <span className="mt-6 inline-block text-[11px] tracking-[0.25em] uppercase text-paper/80 group-hover:text-gold group-active:text-gold transition-colors">
                   Read the story →
                 </span>
               </div>

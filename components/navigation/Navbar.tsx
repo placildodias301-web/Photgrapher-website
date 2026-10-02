@@ -64,17 +64,17 @@ export default function Navbar({ siteName, logoUrl, items }: Props) {
       <div id="mobile-menu" aria-hidden={!open} inert={!open}
         className={`fixed inset-0 z-[55] bg-ink lg:hidden transition-[clip-path] duration-700 ease-[cubic-bezier(.77,0,.18,1)] ${
           open ? "[clip-path:inset(0_0_0_0)]" : "[clip-path:inset(0_0_100%_0)]"}`}>
-        <ul className="flex h-full flex-col justify-center gap-5 px-8">
+        <ul className="flex h-full flex-col justify-center gap-3 px-6">
           {items.map((i, idx) => (
             <li key={i.id} className="overflow-hidden">
               <Link href={i.href}
-                style={{ transitionDelay: open ? `${250 + idx * 60}ms` : "0ms" }}
-                className={`block font-display text-5xl font-light transition-all duration-700 ${
+                style={{ transitionDelay: open ? `${200 + idx * 50}ms` : "0ms" }}
+                className={`block font-display text-2xl font-light transition-all duration-700 ${
                   open ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"}`}>{i.label}</Link>
             </li>
           ))}
-          <li className="mt-6">
-            <Link href="/contact" className="inline-block border border-paper/40 px-7 py-3 text-[11px] tracking-[0.28em] uppercase">
+          <li className="mt-4">
+            <Link href="/contact" className="inline-block border border-paper/40 px-6 py-2.5 text-[11px] tracking-[0.28em] uppercase">
               Let&apos;s talk
             </Link>
           </li>
