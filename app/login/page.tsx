@@ -1,12 +1,9 @@
-import { redirect } from "next/navigation";
-import { getSessionUser } from "@/lib/auth";
 import { getSiteSettings } from "@/lib/settings";
 import LoginForm from "./LoginForm";
 
 export const metadata = { title: "Sign in", robots: { index: false } };
 
 export default async function LoginPage({ searchParams }: { searchParams: Promise<{ next?: string }> }) {
-  if (await getSessionUser()) redirect("/dashboard");
   const { next } = await searchParams;
   const s = await getSiteSettings();
   return (

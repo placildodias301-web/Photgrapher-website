@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Bell } from "@/components/dashboard/NotificationCenter";
 
@@ -36,12 +36,12 @@ const GROUPS: { title?: string; items: { label: string; href: string }[] }[] = [
 
 export default function Sidebar({ siteName, displayName }: { siteName: string; displayName: string }) {
   const pathname = usePathname();
-  const router = useRouter();
   const [open, setOpen] = useState(false);
 
   async function logout() {
     await fetch("/api/auth/logout", { method: "POST" });
-    router.replace("/login"); router.refresh();
+    // eslint-disable-next-line @next/next/no-location-assign-relative-destination
+    window.location.href = "/login";
   }
 
   const nav = (

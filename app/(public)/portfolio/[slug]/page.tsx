@@ -22,7 +22,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         <p className="mt-5 text-sm tracking-wide text-mute">{[shoot.location, shoot.event_date && formatDate(shoot.event_date)].filter(Boolean).join(" · ")}</p>
         {shoot.description && <p className="mt-8 max-w-2xl whitespace-pre-wrap leading-relaxed text-paper/80">{shoot.description}</p>}
       </header>
-      {photos.length === 0 ? <p className="text-mute">The gallery for this project is on its way.</p> : <PhotoGrid initial={photos} total={photos.length} pageSize={photos.length} captions={false} />}
+      {photos.length === 0 ? <p className="text-mute">The gallery for this project is on its way.</p> : <PhotoGrid initial={photos} total={photos.length} pageSize={12} captions={false} />}
     </div>
   );
 }

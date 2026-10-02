@@ -50,6 +50,17 @@ export const getPortfolioCategories = () =>
   query<{ id: number; name: string; slug: string }>(
     `SELECT c.id, c.name, c.slug FROM categories c WHERE c.enabled AND EXISTS (SELECT 1 FROM shoots s WHERE s.category_id = c.id AND s.published) ORDER BY c.display_order, c.id`);
 
+/** Paginated shoot list (used by the public Portfolio page). */
+export async function getPortfolioShoots(opts: { category?: string; page: number; pageSize: number }) {
+  const where = `s.published ${opts.category ? "AND c.slug = ?" : ""}`;
+  const args: unknown[] = opts.category ? [opts.category] : [];
+  const total = (await queryOne<{ n: number }>(`SELECT COUNT(*) AS n FROM shoots s LEFT JOIN categories c ON c.id = s.category_id WHERE ${where}`, args))?.n ?? 0;
+  const items = await query<ShootCard>(
+    `SELECT ${SHOOT_CARD} ${SHOOT_FROM} WHERE ${where} ORDER BY s.event_date DESC, s.id DESC LIMIT ? OFFSET ?`,
+    [...args, opts.pageSize, (opts.page - 1) * opts.pageSize]);
+  return { items, total };
+}
+
 export type ShootDetail = ShootCard & { description: string | null; images: { id: number; url: string; width: number | null; height: number | null; alt: string | null }[] };
 export async function getShootBySlug(slug: string): Promise<ShootDetail | null> {
   const s = await queryOne<ShootCard & { description: string | null }>(`SELECT ${SHOOT_CARD}, s.description ${SHOOT_FROM} WHERE s.slug = ? AND s.published`, [slug]);

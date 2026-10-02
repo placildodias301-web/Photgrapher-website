@@ -1,11 +1,9 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import PasswordField from "@/components/ui/PasswordField";
 
 export default function LoginForm({ next }: { next: string }) {
-  const router = useRouter();
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -17,7 +15,10 @@ export default function LoginForm({ next }: { next: string }) {
       method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username: fd.get("username"), password: fd.get("password") }),
     });
-    if (res.ok) { router.replace(next); router.refresh(); return; }
+    if (res.ok) { 
+      window.location.href = next; 
+      return; 
+    }
     setError((await res.json().catch(() => ({}))).error || "Something went wrong. Please try again.");
     setBusy(false);
   }

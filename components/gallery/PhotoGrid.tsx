@@ -18,7 +18,9 @@ type Props = {
 /** Masonry gallery: shortest-column placement (stable when more photos load) + fullscreen lightbox. */
 export default function PhotoGrid({ initial, total, pageSize, fetchMore, captions = true }: Props) {
   const cols = useColumns();
-  const [items, setItems] = useState(initial);
+  // If fetchMore is not provided, we do local pagination from the initial array
+  const isLocal = !fetchMore;
+  const [items, setItems] = useState(() => isLocal ? initial.slice(0, pageSize || 12) : initial);
   const [page, setPage] = useState(1);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(false);
@@ -35,7 +37,13 @@ export default function PhotoGrid({ initial, total, pageSize, fetchMore, caption
   }, [items, cols]);
 
   async function more() {
-    if (!fetchMore) return;
+    if (isLocal) {
+      const nextSize = pageSize || 12;
+      const nextItems = initial.slice(page * nextSize, (page + 1) * nextSize);
+      if (nextItems.length) { setItems((x) => [...x, ...nextItems]); setPage((n) => n + 1); }
+      return;
+    }
+    
     setBusy(true); setError(false);
     try {
       const next = await fetchMore(page + 1);
@@ -54,7 +62,7 @@ export default function PhotoGrid({ initial, total, pageSize, fetchMore, caption
                 className="group relative block w-full overflow-hidden bg-ink-2 text-left">
                 <Image src={p.url} alt={p.alt || p.title || ""} width={p.width || 1500} height={p.height || 1000}
                   sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw" quality={80} priority={i < 3}
-                  className="h-auto w-full transition-transform duration-[1200ms] ease-out group-hover:scale-[1.04]" />
+                  className="h-auto w-full object-contain transition-transform duration-[1200ms] ease-out group-hover:scale-[1.04]" />
                 {captions && (p.title || p.category) && (
                   <span className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/85 to-transparent p-4 pt-12 text-[11px] tracking-[0.2em] uppercase opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-focus-visible:opacity-100">
                     {p.title}{p.category ? <span className="text-gold"> · {p.category}</span> : null}
@@ -66,7 +74,7 @@ export default function PhotoGrid({ initial, total, pageSize, fetchMore, caption
         ))}
       </div>
 
-      {items.length < total && fetchMore && (
+      {items.length < total && (fetchMore || isLocal) && (
         <div className="mt-14 text-center">
           <button onClick={more} disabled={busy} className="border border-paper/40 px-8 py-4 text-[11px] tracking-[0.28em] uppercase transition-colors hover:bg-paper hover:text-ink disabled:opacity-50">
             {busy ? "Loading…" : "Load more"}

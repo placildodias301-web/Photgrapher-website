@@ -10,7 +10,9 @@ export default async function Page() {
   return (
     <div className="mx-auto grid max-w-[1600px] gap-16 px-6 pb-28 pt-36 lg:grid-cols-2 lg:px-12 lg:pt-44">
       <div className="relative aspect-[4/5] w-full overflow-hidden bg-ink-2 lg:sticky lg:top-32 lg:self-start">
-        {a.profile_url && <Image src={a.profile_url} alt={a.name ?? "Portrait"} fill sizes="(min-width:1024px) 50vw, 100vw" quality={85} priority className="object-cover" />}
+        <div className="absolute inset-0">
+          {a.profile_url && <Image src={a.profile_url} alt={a.name ?? "Portrait"} fill sizes="(min-width:1024px) 50vw, 100vw" quality={85} priority className="object-cover" />}
+        </div>
       </div>
       <div>
         <p className="mb-4 text-[11px] tracking-[0.35em] text-gold uppercase">About</p>
